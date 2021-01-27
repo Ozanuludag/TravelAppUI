@@ -6,38 +6,25 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import colors from '../assets/colors/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+const height = Dimensions.get('window').height;
 const Details = ({route, navigation}) => {
   const {item} = route.params;
   console.log(JSON.stringify(item));
   const [favorite, setFavorite] = useState(false);
   return (
     <View style={{flex: 1}}>
-      <ImageBackground
-        source={item.image}
-        style={{
-          flex: 0.6,
-          justifyContent: 'flex-end',
-          marginBottom: -20,
-          paddingBottom: 30,
-          paddingLeft: 10,
-        }}>
+      <ImageBackground source={item.imageBig} style={styles.imageWrapper}>
         <TouchableOpacity
-        onPress={() => navigation.goBack()}
-          style={{
-            position: 'absolute',
-            left: 20,
-            top: 10,
-            borderRadius:20
-          }}>
+          onPress={() => navigation.goBack()}
+          style={styles.backBtnWrapper}>
           <IonIcon name="arrow-back-outline" size={32} color={colors.white} />
         </TouchableOpacity>
-        <Text style={{marginBottom: 10, color: colors.white, fontSize: 24}}>
-          {item.title}
-        </Text>
+        <Text style={styles.titleText}>{item.title}</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -51,34 +38,17 @@ const Details = ({route, navigation}) => {
         </View>
       </ImageBackground>
 
-      <View
-        style={{
-          flex: 0.4,
-          backgroundColor: colors.white,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          paddingLeft: 15,
-          paddingRight: 10,
-          paddingTop: 10,
-        }}>
-        <Text
-          style={{
-            fontSize: 26,
-            fontFamily: 'Lato-Bold',
-            marginBottom: 10,
-            marginTop: 10,
-          }}>
-          Description
-        </Text>
-       <ScrollView showsVerticalScrollIndicator={false}>
-       <Text
-          style={{
-            fontSize: 16,
-            marginBottom: 10,
-          }}>
-          {item.description}
-        </Text>
-       </ScrollView>
+      <View style={styles.descriptionWrapper}>
+      
+        <Text style={styles.descriptionText}>Description</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text
+            style={{
+              fontSize: 16,
+            }}>
+            {item.description}
+          </Text>
+        </ScrollView>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View>
@@ -109,25 +79,22 @@ const Details = ({route, navigation}) => {
           <Text style={styles.bookBtnText}>Book Now</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity onPress={() => {
-        setFavorite(!favorite);
-        alert(!favorite ? "Rehber favorilere eklendi!" : "Rehber favorilerden çıkarıldı!")
-      }}
-        style={{
-          width: 70,
-          height: 70,
-          backgroundColor: colors.white,
-          borderRadius: 100,
-          position: 'absolute',
-          right: 20,
-          bottom: 280,
-          elevation: 2,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Icon name={favorite ? 'favorite' : 'favorite-outline'} size={32} color={colors.orange} />
-      </TouchableOpacity>
+      <TouchableOpacity
+          onPress={() => {
+            setFavorite(!favorite);
+            alert(
+              !favorite
+                ? 'Rehber favorilere eklendi!'
+                : 'Rehber favorilerden çıkarıldı!',
+            );
+          }}
+          style={styles.favoriteWrapper}>
+          <Icon
+            name={favorite ? 'favorite' : 'favorite-outline'}
+            size={32}
+            color={colors.orange}
+          />
+        </TouchableOpacity> 
     </View>
   );
 };
@@ -135,6 +102,47 @@ const Details = ({route, navigation}) => {
 export default Details;
 
 const styles = StyleSheet.create({
+  imageWrapper: {
+    height: height * 0.6,
+    justifyContent: 'flex-end',
+    marginBottom: -20,
+    paddingBottom: 30,
+    paddingLeft: 10,
+  },
+  backBtnWrapper: {
+    position: 'absolute',
+    left: 20,
+    top: 10,
+    borderRadius: 20,
+  },
+  titleText: {marginBottom: 10, color: colors.white, fontSize: 24},
+  descriptionWrapper: {
+    flex: 1,
+    backgroundColor: colors.white,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingTop: 10,
+  },
+  descriptionText: {
+    fontSize: 26,
+    fontFamily: 'Lato-Bold',
+    marginTop: 10,
+  },
+  favoriteWrapper: {
+    width: 70,
+    height: 70,
+    backgroundColor: colors.white,
+    borderRadius: 100,
+    right:15,
+    top: height * 0.5 + 20,
+    position: 'absolute',
+    elevation: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   detailTitle: {
     marginVertical: 5,
     color: colors.gray,
@@ -161,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.orange,
     marginTop: 30,
     borderRadius: 20,
-    marginBottom:15
+    marginBottom: 15,
   },
   bookBtnText: {
     fontSize: 18,
